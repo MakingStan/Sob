@@ -19,14 +19,18 @@ public class HelpCommand extends ListenerAdapter {
             EmbedBuilder embedBuilder = new EmbedBuilder();
             embedBuilder.setColor(Color.CYAN);
             embedBuilder.setDescription("" +
+                    "```" +
                     "$calc \"number\"\"operator(/,*,-,+)\"\"number\"\n" +
                     "$meme\n" +
                     "$RPS (Rock paper scissors)\n" +
-                    "$join & $leave (join or leave a call)\n" +
+                    "$time```\n" +
+                    "```$join & $leave (join or leave a call)\n" +
                     "$play (argument)\n" +
                     "$skip\n" +
-                    "$stop\n" +
-                    "$resume");
+                    "$resume\n" +
+                    "$nowplaying\n" +
+                    "$repeat\n" +
+                    "$queue```");
 
             event.getChannel().sendMessage(embedBuilder.build()).queue();
         }

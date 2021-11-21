@@ -19,8 +19,6 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
 
-
-
     public void queue(AudioTrack track)
     {
         if(!this.audioPlayer.startTrack(track, true))
@@ -33,6 +31,7 @@ public class TrackScheduler extends AudioEventAdapter {
     {
        this.audioPlayer.startTrack(this.queue.poll(), false);
     }
+
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {

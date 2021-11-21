@@ -1,11 +1,13 @@
 package org.stan.commands;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.stan.Prefix;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Random;
 
 
@@ -36,7 +38,7 @@ public class RockPaperScissorsCommand extends ListenerAdapter {
                 count--;
                 if(count == 0)
                 {
-                    event.getChannel().sendMessage("choose an emoij:").queue(message -> {
+                    event.getChannel().sendMessage("`paper` `rock` `scissors`").queue(message -> {
                         message.addReaction(paper).queue();
                         message.addReaction(rock).queue();
                         message.addReaction(scissors).queue();
@@ -77,12 +79,13 @@ public class RockPaperScissorsCommand extends ListenerAdapter {
                 return;
             }
 
-            System.out.println("rpsoptions iindex of randomint: "+RPSOptions[randomInt]);
-            System.out.println("user answer : "+userRPSAnswer);
+            EmbedBuilder embedBuilder = new EmbedBuilder();
+
             if(RPSOptions[randomInt].equalsIgnoreCase(userRPSAnswer))
             {
                 //its a tie
-                event.getChannel().sendMessage("Sussy baka rolled "+RPSOptions[randomInt]+". We tied!").queue();
+                embedBuilder.setDescription("Sob rolled "+RPSOptions[randomInt]+". We tied!");
+                embedBuilder.setColor(Color.CYAN);
             }
 
             else if(RPSOptions[randomInt].equalsIgnoreCase(scissors)&&userRPSAnswer.equalsIgnoreCase(rock)
@@ -90,12 +93,15 @@ public class RockPaperScissorsCommand extends ListenerAdapter {
             ||      RPSOptions[randomInt].equalsIgnoreCase(paper)&&userRPSAnswer.equalsIgnoreCase(scissors))
             {
                 //the user won
-                event.getChannel().sendMessage(event.getMember().getUser().getAsMention()+"won! The bot rolled: "+RPSOptions[randomInt]).queue();
+                embedBuilder.setDescription(event.getMember().getUser().getAsMention()+"won! The bot rolled: "+RPSOptions[randomInt]);
+                embedBuilder.setColor(Color.GREEN);
             }
             else
             {
-                event.getChannel().sendMessage("Sussy baka won! he rolled: "+RPSOptions[randomInt]+". Well played!").queue();
+                embedBuilder.setDescription("Sob won! he rolled: "+RPSOptions[randomInt]+". Well played!");
+                embedBuilder.setColor(Color.RED);
             }
+            event.getChannel().sendMessage(embedBuilder.build()).queue();
 
         }
     }

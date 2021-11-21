@@ -15,9 +15,9 @@ public class CalculatorCommand extends ListenerAdapter {
         {
                 if(args[2] != null)
                 {
-                        int num1 = Integer.parseInt(args[1]);
-                        int num2 = Integer.parseInt(args[3]);
-                        int result = 0;
+                        long num1 = Long.parseLong(args[1]);
+                        long num2 = Long.parseLong(args[3]);
+                        long result = 0;
                         String operator = args[2];
 
                         switch(operator)
@@ -32,7 +32,7 @@ public class CalculatorCommand extends ListenerAdapter {
                             break;
                         }
 
-                        event.getChannel().sendMessage("The result:```"+result+"```").queue();
+                        event.getChannel().sendMessage("The result:`"+result+"`").queue();
             }
         }
     }

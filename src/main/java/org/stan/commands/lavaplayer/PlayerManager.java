@@ -49,14 +49,17 @@ public class PlayerManager {
             @Override
             public void trackLoaded(AudioTrack track) {
                 musicManager.scheduler.queue(track);
+                final String duration = String.valueOf(track.getDuration()/1000);
                 channel.sendMessage("Author: ")
                         .append(track.getInfo().author)
-                        .append("\ntitle: ")
+                        .append("\nTitle: ")
                         .append(track.getInfo().title)
-                        .append("\nurl: ")
+                        .append("\nUrl: ")
                         .append(track.getInfo().uri)
-                        .append("\nqueue position: ")
+                        .append("\nQueue position: ")
                         .append(String.valueOf(musicManager.scheduler.queue.size()+1))
+                        .append("\nDuration: ")
+                        .append(duration.charAt(0)+":"+duration.charAt(duration.length()-2)+""+duration.charAt(duration.length()-1))
                         .queue();
             }
 
@@ -65,16 +68,18 @@ public class PlayerManager {
             {
                 final List<AudioTrack> tracks = playlist.getTracks();
                 final AudioTrack track = tracks.get(0);
-
+                final String duration = String.valueOf(track.getDuration()/1000);
                 musicManager.scheduler.queue(track);
                 channel.sendMessage("Author: ")
                         .append(track.getInfo().author)
-                        .append("\ntitle: ")
+                        .append("\nTitle: ")
                         .append(track.getInfo().title)
-                        .append("\nurl: ")
+                        .append("\nUrl: ")
                         .append(track.getInfo().uri)
-                        .append("\nqueue position: ")
+                        .append("\nQueue position: ")
                         .append(String.valueOf(musicManager.scheduler.queue.size()+1))
+                        .append("\nDuration: ")
+                        .append(duration.charAt(0)+":"+duration.charAt(duration.length()-2)+""+duration.charAt(duration.length()-1))
                         .queue();
             }
 
