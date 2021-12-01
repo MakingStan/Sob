@@ -3,27 +3,18 @@ package org.stan.commands.audio;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import net.dv8tion.jda.api.audio.AudioSendHandler;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.stan.Prefix;
 import org.stan.commands.lavaplayer.GuildMusicManager;
 import org.stan.commands.lavaplayer.PlayerManager;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -45,6 +36,7 @@ public class AudioHandler extends ListenerAdapter {
     }
 
 
+
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event)
     {
         String args[] = event.getMessage().getContentRaw().split(" ");
@@ -53,6 +45,7 @@ public class AudioHandler extends ListenerAdapter {
         final GuildVoiceState memberVoiceState = member.getVoiceState();
         final AudioManager audioManager = event.getGuild().getAudioManager();
         final VoiceChannel memberChannel = memberVoiceState.getChannel();
+
 
         if(args[0].equalsIgnoreCase(prefix+"join"))
         {
@@ -67,6 +60,7 @@ public class AudioHandler extends ListenerAdapter {
                 return;
             }
         }
+        //play commnd
             if(args[0].equalsIgnoreCase(prefix+"play"))
             {
                 link = event.getMessage().getContentRaw();
@@ -76,7 +70,6 @@ public class AudioHandler extends ListenerAdapter {
                 {
                     link = "ytsearch:"+link;
                 }
-                System.out.println(link);
 
                 PlayerManager.getInstance()
                         .loadAndPlay(event.getChannel(), link);
@@ -89,6 +82,11 @@ public class AudioHandler extends ListenerAdapter {
             {
                 musicManager.scheduler.audioPlayer.setPaused(true);
                 event.getChannel().sendMessage("Succesfully stopped the song.").queue();
+            }
+
+            if(args[0].equalsIgnoreCase(prefix+"unmute"))
+            {
+                audioManager.setSelfMuted(false);
             }
 
             //clear command
@@ -130,17 +128,24 @@ public class AudioHandler extends ListenerAdapter {
             {
                 final AudioTrack track = musicManager.scheduler.audioPlayer.getPlayingTrack();
                 final String duration = String.valueOf(track.getDuration()/1000);
-                event.getChannel().sendMessage("Author: ")
-                        .append(track.getInfo().author)
-                        .append("\nTitle: ")
-                        .append(track.getInfo().title)
-                        .append("\nUrl: ")
-                        .append(track.getInfo().uri)
-                        .append("\nQueue position: ")
-                        .append(String.valueOf(musicManager.scheduler.queue.size()+1))
-                        .append("\nDuration: ")
-                        .append(duration.charAt(0)+":"+duration.charAt(duration.length()-2)+""+duration.charAt(duration.length()-1))
+
+                event.getChannel().sendMessage("Author: "
+                    +(track.getInfo().author)
+                    +("\nTitle: ")
+                    +(track.getInfo().title)
+                    +("\nUrl: ")
+                    +(track.getInfo().uri)
+                    +("\nQueue position: ")
+                    +(String.valueOf(musicManager.scheduler.queue.size()+1))
+                    +("\nDuration: ")
+                    +(duration))
                         .queue();
+            }
+
+            //mute command
+            if(args[0].equalsIgnoreCase(prefix+"mute"))
+            {
+                audioManager.setSelfMuted(true);
             }
 
             //repeat command
@@ -160,40 +165,39 @@ public class AudioHandler extends ListenerAdapter {
 
                 if(queue.isEmpty())
                 {
-                    event.getChannel().sendMessage("The current queue is empty \uD83C\uDFB5");
+                    channel.sendMessage("The current queue is empty \uD83C\uDFB5").queue();
                     return;
                 }
 
                 final int trackCount = Math.min(queue.size(), 20);
                 final List<AudioTrack> trackList = new ArrayList<>(queue);
 
-                MessageAction messageAction = event.getChannel().sendMessage("**Current Queue**\n");
+                    MessageAction messageAction = event.getChannel().sendMessage("**Current Queue**\n");
+                    for(int i = 0; i<trackCount; i++)
+                    {
+                        final AudioTrack track = trackList.get(i);
+                        final AudioTrackInfo info = track.getInfo();
+                        final String duration = String.valueOf(track.getDuration()/1000);
 
-                for(int i = 0; i<trackCount; i++)
-                {
-                    final AudioTrack track = trackList.get(i);
-                    final AudioTrackInfo info = track.getInfo();
-                    final String duration = String.valueOf(track.getDuration()/1000);
-                    System.out.println(duration);
-                    messageAction.append('#')
-                            .append(String.valueOf(i+1))
-                            .append(" `")
-                            .append(info.title)
-                            .append(" By ")
-                            .append(info.author)
-                            .append("` [`")
-                            .append(duration.charAt(0)+":"+duration.charAt(duration.length()-2)+""+duration.charAt(duration.length()-1))
-                            .append("`]\n");
-                }
-                if(trackList.size() > trackCount)
-                {
-                    messageAction.append("And `")
-                            .append(String.valueOf(trackList.size() - trackCount))
-                            .append("more...");
+                        messageAction.append('#')
+                                .append(String.valueOf(i+1))
+                                .append(" `")
+                                .append(info.title)
+                                .append(" By ")
+                                .append(info.author)
+                                .append("` [`")
+                                .append(duration)
+                                .append("`]\n");
+                    }
+                    if(trackList.size() > trackCount)
+                    {
+                        messageAction.append("And `")
+                                .append(String.valueOf(trackList.size() - trackCount))
+                                .append("more...");
+                    }
+                    messageAction.queue();
                 }
 
-                messageAction.queue();
-            }
 
 
             if(args[0].equalsIgnoreCase(prefix+"leave"))

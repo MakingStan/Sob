@@ -34,6 +34,11 @@ public class SobBot {
         builder.addEventListeners(new RockPaperScissorsCommand());
         builder.addEventListeners(new AudioHandler());
         builder.addEventListeners(new TimeCommand());
+        builder.addEventListeners(new BanCommand());
+        builder.addEventListeners(new KickCommand());
+        builder.addEventListeners(new UnBanCommand());
+        builder.addEventListeners(new TotalMessageCommand());
+
 
         builder.build();
     }

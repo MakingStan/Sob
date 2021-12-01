@@ -75,7 +75,6 @@ public class RockPaperScissorsCommand extends ListenerAdapter {
                 userRPSAnswer = paper;
             }
             else {
-                event.getChannel().sendMessage("That is not a valid emote.").queue();
                 return;
             }
 

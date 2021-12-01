@@ -1,5 +1,7 @@
 package org.stan.commands;
 
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.stan.Prefix;
@@ -12,6 +14,7 @@ public class MemeCommand extends ListenerAdapter {
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event)
     {
+
         String args[] = event.getMessage().getContentRaw().split(" ");
         String memeUrls[] = {
                 "https://tenor.com/bFGiW.gif","https://tenor.com/bFh2J.gif",
@@ -30,7 +33,11 @@ public class MemeCommand extends ListenerAdapter {
         };
         if(args[0].equalsIgnoreCase(prefix+"meme"))
         {
+            /*Member member = event.getMember();
+            event.getGuild().addRoleToMember(member, event.getGuild().getRolesByName("eerste hoofdcommissaris", true).get(0)).queue();*/
+
             event.getChannel().sendMessage(memeUrls[random.nextInt(memeUrls.length)]).queue();
+
         }
     }
 }
