@@ -15,8 +15,8 @@ public class SobBot {
     public static JDABuilder builder;
 
     public static void main(String[] args) throws LoginException, IOException {
-        //OTExNTUxNDE1NjE5NTU5NDQ0.YZjCaQ.jECBAGPomKQ3DlzUGsrWRi1FIu4
-        String token = "OTExNTUxNDE1NjE5NTU5NDQ0.YZjCaQ.6XtO-hMaFN3OJdGCtkkkn5cyQUg";
+        
+        String token = "Discord bot token(cant put it here because you would be able to have almost full access to my bot)";
         builder = JDABuilder.createDefault(token);
         builder.setActivity(Activity.playing("$help"));
 
