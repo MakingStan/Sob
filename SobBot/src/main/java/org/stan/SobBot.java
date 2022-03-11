@@ -8,9 +8,7 @@ import org.stan.commands.*;
 import org.stan.commands.audio.AudioHandler;
 
 import javax.security.auth.login.LoginException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
-import java.sql.Time;
 
 public class SobBot {
 
@@ -18,7 +16,7 @@ public class SobBot {
 
     public static void main(String[] args) throws LoginException, IOException {
         //OTExNTUxNDE1NjE5NTU5NDQ0.YZjCaQ.jECBAGPomKQ3DlzUGsrWRi1FIu4
-        String token = "OTExNTUxNDE1NjE5NTU5NDQ0.YZjCaQ.jECBAGPomKQ3DlzUGsrWRi1FIu4";
+        String token = "OTExNTUxNDE1NjE5NTU5NDQ0.YZjCaQ.6XtO-hMaFN3OJdGCtkkkn5cyQUg";
         builder = JDABuilder.createDefault(token);
         builder.setActivity(Activity.playing("$help"));
 
@@ -38,6 +36,7 @@ public class SobBot {
         builder.addEventListeners(new BanCommand());
         builder.addEventListeners(new KickCommand());
         builder.addEventListeners(new TotalMessageCommand());
+        builder.addEventListeners(new ServerStatsCommand());
 
 
         builder.build();
